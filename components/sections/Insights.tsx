@@ -2,7 +2,7 @@
 
 import { Lines, FadeUp } from "@/components/motion/primitives";
 import { Kicker, ArrowRight } from "@/components/ui";
-import { useCopy } from "@/lib/copy";
+import { useCopy, useLang } from "@/lib/copy";
 
 /* Covers are generated from the brand's radial motif rather than stock photos —
    three colours only, and they scale to any size without an asset pipeline. */
@@ -80,6 +80,8 @@ function Cover({ kind }: { kind: "arcs" | "dots" | "rays" }) {
 
 export function Insights() {
   const { insights } = useCopy();
+  const lang = useLang();
+  const insightsHref = lang === "ar" ? "/ar/insights" : "/insights";
   return (
     <section id="insights" className="rule-b" aria-labelledby="insights-heading">
       <div className="shell section-y">
@@ -93,7 +95,7 @@ export function Insights() {
             />
           </div>
           <a
-            href="/insights"
+            href={insightsHref}
             data-cursor="read"
             className="-my-2 inline-flex min-h-[40px] items-center gap-2 py-2 text-[14px] font-semibold text-blue-ink transition-opacity hover:opacity-70"
           >
@@ -103,13 +105,13 @@ export function Insights() {
         </div>
 
         <FadeUp stagger={0.08} className="head-gap grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {insights.articles.map((a) => (
+          {insights.articles.map((a, index) => (
             <article key={a.title} className="group flex flex-col">
-              <a href="/insights" className="flex h-full flex-col" data-cursor="read">
+              <a href={`${insightsHref}#article-${index + 1}`} className="flex h-full flex-col" data-cursor="read">
                 <div className="relative aspect-[420/236] overflow-hidden rounded-xl border border-line">
                   <Cover kind={a.cover} />
                   <span
-                    className="absolute left-3.5 top-3.5 rounded border border-line bg-paper px-2.5 py-1
+                    className="absolute start-3.5 top-3.5 rounded border border-line bg-paper px-2.5 py-1
                       font-mono text-[8.5px] uppercase tracking-[0.14em] text-ink-70"
                   >
                     {a.category}
@@ -125,7 +127,7 @@ export function Insights() {
                 </h3>
 
                 <span className="mt-auto inline-flex items-center gap-2 pt-6 text-[13.5px] font-medium text-blue-ink">
-                  Read article
+                  {insights.read}
                   <ArrowRight size={13} />
                 </span>
               </a>

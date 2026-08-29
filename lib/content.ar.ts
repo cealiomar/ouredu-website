@@ -122,7 +122,7 @@ export const systemGroups: SystemGroup[] = [
   },
   {
     index: "٠٣",
-    count: "٠٢ نظامان",
+    count: "نظامان",
     title: ["الاستعداد", "للاختبارات"],
     description:
       "تدريب منظّم على الاختبارات التي تحدد الخطوة التالية — للطلاب في القدرات، وللمعلمين في اختبارات الرخصة.",
@@ -257,6 +257,7 @@ export const insights = {
   kicker: "المدونة",
   headline: ["من المدونة."],
   all: "كل المقالات",
+  read: "اقرأ المقال",
   articles: [
     {
       date: "١٩ سبتمبر ٢٠٢٥",
@@ -290,6 +291,9 @@ export const finalCta = {
 };
 
 export const footer = {
+  language: "اللغة",
+  currentLanguage: "AR",
+  alternateLanguage: "EN",
   blurb:
     "شركة تعليمنا الاستثمارية تبني الأنظمة التي تُدير المؤسسات التعليمية والتدريبية والخيرية في أنحاء المملكة العربية السعودية.",
   columns: [
@@ -539,7 +543,7 @@ export const cursor: Record<string, string> = {
 export const chrome = {
   logoAlt: "تعليمنا",
   home: "تعليمنا — الرئيسية",
-  langSwitch: "Switch to English",
+  langSwitch: "التبديل إلى الإنجليزية",
 };
 
 export const whoLabels = {

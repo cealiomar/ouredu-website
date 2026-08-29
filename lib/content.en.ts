@@ -271,6 +271,7 @@ export const insights = {
   kicker: "Insights",
   headline: ["From the blog."],
   all: "All articles",
+  read: "Read article",
   articles: [
     {
       date: "19 Sep 2025",
@@ -304,6 +305,9 @@ export const finalCta = {
 };
 
 export const footer = {
+  language: "Language",
+  currentLanguage: "EN",
+  alternateLanguage: "AR",
   blurb:
     "Taaleemna Investment builds the systems that run educational, training, and charitable institutions across Saudi Arabia.",
   columns: [

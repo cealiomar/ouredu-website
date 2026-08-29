@@ -111,7 +111,7 @@ export function Comparison() {
               <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-line bg-paper">
                 <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-off px-4 py-3">
                   <span className="flex items-center gap-2.5">
-                    <Image src="/logo.svg" alt="" width={18} height={18} className="h-4 w-auto" aria-hidden="true" />
+                    <Image src="/logo.svg" alt="" width={56} height={16} aria-hidden="true" />
                     <span className="text-[12.5px] font-semibold">{compareUI.workspace}</span>
                   </span>
                   <span className="hidden items-center gap-1.5 rounded-full bg-blue-bg px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.12em] text-blue-ink sm:inline-flex">
@@ -219,7 +219,7 @@ export function Comparison() {
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={Math.round(pct)}
-              aria-valuetext={`${Math.round(pct)} per cent showing today's tools`}
+              aria-valuetext={`${Math.round(pct)}%`}
               onKeyDown={onKeyDown}
               data-cursor="drag"
               className="pin-inline-mid absolute top-1/2 flex size-11 cursor-ew-resize

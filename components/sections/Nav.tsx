@@ -103,7 +103,6 @@ export function Nav() {
             borderColor: "#E6E9EC",
             backgroundColor: "rgba(255,255,255,0.86)",
             boxShadow: "0 12px 34px -14px rgba(10,20,30,0.22)",
-            invalidateOnRefresh: true,
           },
           0,
         );
@@ -205,7 +204,13 @@ export function Nav() {
       >
         <nav className="contents" aria-label={navUI.main}>
           <a href={navUI.home} className="flex shrink-0 items-center justify-self-start" aria-label={chrome.home}>
-            <Image src="/logo.svg" alt={chrome.logoAlt} width={96} height={26} priority className="h-[26px] w-auto" />
+            <Image
+              src="/logo.svg"
+              alt={chrome.logoAlt}
+              width={91}
+              height={26}
+              priority
+            />
           </a>
 
           <ul ref={list} className="relative hidden items-center justify-center gap-0.5 lg:flex">

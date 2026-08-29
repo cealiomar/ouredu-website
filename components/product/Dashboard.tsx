@@ -303,7 +303,7 @@ export function Dashboard() {
         {/* ---------------- sidebar ---------------- */}
         <aside className="border-b border-line bg-off md:flex md:h-full md:flex-col md:border-b-0 md:border-e">
           <div className="flex items-center gap-2.5 border-b border-line px-4 py-3.5">
-            <Image src="/logo.svg" alt="" width={18} height={18} className="h-[18px] w-auto" aria-hidden="true" />
+            <Image src="/logo.svg" alt="" width={63} height={18} aria-hidden="true" />
             <span className="flex-1 truncate text-[13px] font-semibold">{t.org}</span>
             <ChevronDown size={13} className="text-ink-45" aria-hidden="true" />
           </div>

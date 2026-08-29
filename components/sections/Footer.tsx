@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCopy } from "@/lib/copy";
 
 export function Footer() {
-  const { footer } = useCopy();
+  const { footer, chrome, nav } = useCopy();
   return (
     <footer className="bg-ink text-paper">
       <div className="shell pb-9 pt-[clamp(44px,6vw,80px)]">
@@ -12,27 +12,30 @@ export function Footer() {
           <div className="col-span-2 md:col-span-3 lg:col-span-1 lg:pe-12">
             <Image
               src="/logo.svg"
-              alt="OurEdu"
-              width={120}
-              height={34}
-              className="h-8 w-auto brightness-0 invert"
+              alt={chrome.logoAlt}
+              width={112}
+              height={32}
+              className="brightness-0 invert"
             />
             <p className="mt-6 max-w-[320px] text-[13.5px] leading-[1.7] text-[#9A9A9A]">{footer.blurb}</p>
 
             <div
               className="mt-7 inline-flex rounded-lg border border-white/20 p-0.5"
               role="group"
-              aria-label="Language"
+              aria-label={footer.language}
             >
-              <span className="rounded-md bg-white/15 px-3.5 py-1.5 font-mono text-[11px] tracking-[0.1em]">
-                EN
+              <span
+                aria-current="true"
+                className="rounded-md bg-white/15 px-3.5 py-1.5 font-mono text-[11px] tracking-[0.1em]"
+              >
+                {footer.currentLanguage}
               </span>
               <a
-                href="/ar"
+                href={nav.langHref}
                 className="rounded-md px-3.5 py-1.5 font-mono text-[11px] tracking-[0.1em] text-[#6E6E6E]
                   transition-colors hover:text-paper"
               >
-                AR
+                {footer.alternateLanguage}
               </a>
             </div>
           </div>

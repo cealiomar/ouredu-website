@@ -222,7 +222,7 @@ function Certificate() {
       <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[1fr_280px]">
         <div className="flex min-h-0 flex-col p-5">
           <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-line bg-off px-6 py-[clamp(18px,3vh,36px)] text-center">
-            <Image src="/logo.svg" alt="" width={26} height={26} className="h-6 w-auto" aria-hidden="true" />
+            <Image src="/logo.svg" alt="" width={84} height={24} aria-hidden="true" />
             <p className="mono-label mt-[clamp(10px,2vh,16px)]">{o.heading}</p>
             <p className="mt-[clamp(10px,2vh,16px)] font-display text-[clamp(22px,3.4vw,34px)] font-extrabold tracking-[-0.03em]">
               {o.name}
