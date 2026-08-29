@@ -102,7 +102,7 @@ export function Insights() {
           </a>
         </div>
 
-        <FadeUp stagger={0.08} className="head-gap grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <FadeUp stagger={0.08} className="head-gap grid grid-cols-1 gap-8 lg:grid-cols-3">
           {insights.articles.map((a) => (
             <article key={a.title} className="group flex flex-col">
               <a href="/insights" className="flex h-full flex-col" data-cursor="read">

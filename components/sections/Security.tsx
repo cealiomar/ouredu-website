@@ -204,17 +204,14 @@ export function Security() {
           </FadeUp>
         </div>
 
-        <ol className="head-gap grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <ol className="head-gap grid grid-cols-1 lg:grid-cols-3">
           {security.pillars.map((p, i) => {
             const Diagram = WIRES[i];
             return (
               <li
                 key={p.index}
-                className={`relative border-t border-line py-9 md:px-6 md:py-10 lg:px-9
-                  md:[&:nth-child(2n+1)]:ps-0 lg:[&:nth-child(2n+1)]:ps-9
-                  md:[&:not(:nth-child(2n+1))]:border-s
-                  lg:[&:nth-child(3n+1)]:border-s-0 lg:[&:nth-child(3n+1)]:ps-0
-                  lg:[&:not(:nth-child(3n+1))]:border-s`}
+                className="relative border-t border-line py-9 md:py-10 lg:px-9
+                  lg:[&:not(:nth-child(3n+1))]:border-s"
               >
                 <div className="sec-wire">
                   <Diagram />

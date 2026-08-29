@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+<img src="public/logo.svg" alt="OurEdu" height="40">
 
-First, run the development server:
+### Every system your institution runs — built by one company
+
+Marketing site for **Taaleemna Investment (تعليمنا)**, the Saudi company behind
+thirteen education systems. English and Arabic, one codebase.
+
+</div>
+
+---
+
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000> for English, <http://localhost:3000/ar> for Arabic.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build      # production build
+npx tsc --noEmit   # type check
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Node 20+. No environment variables, no database, no API keys — every page is
+statically rendered.
 
-## Learn More
+## What this is
 
-To learn more about Next.js, take a look at the following resources:
+Thirteen products, sold separately, grouped into four. The site's argument is
+that they come from one company and the ones serving the same institution share
+its data — so instead of a feature list it shows the things a person actually
+receives: a bus route sheet, an enrolment record, a training certificate, a
+lesson plan.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Art direction:** three colours — white, black, `#00ACED`. No photography.
+Every product surface on the page is drawn as a wireframe.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stack
 
-## Deploy on Vercel
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · GSAP 3
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Full documentation lives in [`handoff/`](handoff/):
+
+| | |
+|---|---|
+| [ARCHITECTURE](handoff/ARCHITECTURE.md) | Code layout, the two routes, how copy is typed |
+| [DESIGN-SYSTEM](handoff/DESIGN-SYSTEM.md) | Colour, type, the one spacing scale |
+| [MOTION](handoff/MOTION.md) | Every animation and the traps found building them |
+| [RTL](handoff/RTL.md) | What Arabic needed beyond translation |
+| [CONTENT-NEEDED](handoff/CONTENT-NEEDED.md) | **What is still placeholder** |
+| [TESTING](handoff/TESTING.md) | How this was verified, and what was not |
+
+## Structure
+
+```
+app/
+  (en)/page.tsx          /      English, dir="ltr"
+  (ar)/ar/page.tsx       /ar    Arabic,  dir="rtl"
+  globals.css            design tokens and the shared layout rules
+components/
+  sections/              one file per section of the page
+  product/Dashboard.tsx  the product surface, with a scripted self-demo
+  motion/primitives.tsx  GSAP setup and shared reveal helpers
+lib/
+  content.en.ts          source of truth for the shape of all copy
+  content.ar.ts          must satisfy the same type, or the build fails
+```
+
+## Before shipping
+
+Read [`handoff/CONTENT-NEEDED.md`](handoff/CONTENT-NEEDED.md). Several claims on
+the page — hosting location, backup targets, customer results — are placeholders
+awaiting facts from the client, and the headline figures should be confirmed as
+current.

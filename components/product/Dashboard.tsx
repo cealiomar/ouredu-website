@@ -320,8 +320,8 @@ export function Dashboard() {
                   type="button"
                   onClick={() => setNav(i)}
                   aria-pressed={on}
-                  className={`flex shrink-0 items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors
-                    md:w-full ${on ? "bg-paper font-semibold text-blue-ink shadow-[0_1px_0_rgba(10,20,30,.04)] ring-1 ring-line" : "text-ink-70 hover:bg-paper/70"}`}
+                  className={`flex min-h-[40px] shrink-0 items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors
+                    md:min-h-0 md:w-full ${on ? "bg-paper font-semibold text-blue-ink shadow-[0_1px_0_rgba(10,20,30,.04)] ring-1 ring-line" : "text-ink-70 hover:bg-paper/70"}`}
                 >
                   <Icon size={15} strokeWidth={1.6} className={on ? "text-blue-ink" : "text-ink-45"} aria-hidden="true" />
                   <span className="whitespace-nowrap md:flex-1 md:text-start">{n.label}</span>
@@ -339,8 +339,8 @@ export function Dashboard() {
                 <button
                   key={t.label}
                   type="button"
-                  className="flex shrink-0 items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px]
-                    text-ink-70 transition-colors hover:bg-paper/70 md:w-full"
+                  className="flex min-h-[40px] shrink-0 items-center gap-2.5 rounded-lg px-2.5 py-2
+                    text-[13px] text-ink-70 transition-colors hover:bg-paper/70 md:min-h-0 md:w-full"
                 >
                   <Icon size={15} strokeWidth={1.6} className="text-ink-45" aria-hidden="true" />
                   <span className="whitespace-nowrap md:flex-1 md:text-start">{t.label}</span>

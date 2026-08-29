@@ -35,7 +35,7 @@ export function WhoItsFor() {
         {/* Pulled out by the same amount the columns are padded in, so all three
             tracks are equal width — and the first column's text still lands on
             the section headline's left edge instead of being inset from it. */}
-        <ol className="head-gap grid grid-cols-1 rule-b md:-mx-6 md:grid-cols-2 lg:-mx-9 lg:grid-cols-3">
+        <ol className="head-gap grid grid-cols-1 rule-b lg:-mx-9 lg:grid-cols-3">
           {whoItsFor.paths.map((p, i) => {
             const Icon = ICONS[i];
             return (
@@ -44,9 +44,7 @@ export function WhoItsFor() {
                 /* every card carries its own top rule, so the grid reads the
                    same at one, two or three columns; the vertical divider is
                    added only where a card actually has a neighbour beside it */
-                className="flex flex-col border-t border-line py-7 md:px-6 md:py-9 lg:px-9
-                  md:[&:not(:nth-child(2n+1))]:border-s
-                  lg:[&:nth-child(4)]:border-s-0
+                className="flex flex-col border-t border-line py-7 md:py-9 lg:px-9
                   lg:[&:not(:nth-child(3n+1))]:border-s"
               >
                 {/* the heading is the control, so the accordion is reachable
@@ -122,7 +120,7 @@ export function WhoItsFor() {
                   <a
                     href="#systems"
                     data-cursor="explore"
-                    className="inline-flex items-center gap-2 text-[14px]
+                    className="-my-2 inline-flex min-h-[40px] items-center gap-2 py-2 text-[14px]
                       font-semibold transition-colors hover:text-blue-ink"
                   >
                     {whoLabels.see}

@@ -1,7 +1,8 @@
 {
-  "name": "oureduwebsite",
+  "name": "ouredu-website",
   "version": "0.1.0",
   "private": true,
+  "description": "Marketing site for Taaleemna Investment — thirteen education systems, English and Arabic.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

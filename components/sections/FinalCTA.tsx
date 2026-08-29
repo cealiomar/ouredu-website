@@ -61,7 +61,7 @@ export function FinalCTA() {
                 href={`tel:${finalCta.phone.replace(/\s/g, "")}`}
                 className="font-mono tracking-[0.04em] text-ink transition-colors hover:text-blue-ink"
               >
-                <span className="ltr-run">{finalCta.phone}</span>
+                <span className="ltr-run inline-flex min-h-[40px] items-center">{finalCta.phone}</span>
               </a>
             </p>
           </FadeUp>
