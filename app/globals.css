@@ -1,26 +1,271 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------
+   OurEdu design tokens
+   Three colours only: paper (white), ink (black), brand blue #00ACED.
+   Everything else is a shade of one of them.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-paper: #ffffff;
+  --color-off: #fafafa;
+  /* third surface so neighbouring sections never blend into one another */
+  --color-tint: #f4fbfe;
+  --color-ink: #0a0a0a;
+  --color-ink-70: #575757;
+  --color-ink-45: #8c8c8c;
+  --color-ink-25: #c4c4c4;
+  --color-line: #e4e4e4;
+  --color-line-2: #f0f0f0;
+
+  /* brand blue — fills only. #00ACED on white is 2.3:1 (fails WCAG),
+     so small text uses the darker shade below. */
+  --color-blue: #00aced;
+  --color-blue-ink: #0077a8; /* 4.6:1 on white ✓ */
+  --color-blue-bg: #eaf8fe;
+
+  --font-display: var(--font-alexandria), system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-sans-ar: var(--font-plex-sans-ar), var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --spacing-gutter: 24px;
+  --spacing-margin: 80px;
+  --container-content: 1280px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Arabic display type carries taller ascenders and deeper descenders than
+       the Latin cut, so the tight Latin leading crowds it. One variable, set
+       per direction, keeps both readings right. */
+    --lh-display: 1.04;
+    /* the hero sets its own, tighter, because it is the largest type here */
+    --lh-hero: 0.98;
+  }
+  [dir="rtl"] {
+    --lh-display: 1.34;
+    --lh-hero: 1.26;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* No `scroll-behavior: smooth` here — it fights ScrollTrigger's scrubbed
+       timelines and pins. Anchor jumps are eased in JS instead. */
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  html[dir="rtl"] body {
+    font-family: var(--font-sans-ar);
+  }
+
+  /* visible, high-contrast focus for keyboard users */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background: var(--color-blue);
+    color: var(--color-ink);
+  }
+
+  /* hide the native pointer only once the custom one is actually running */
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* container that matches the 1440 / 1280 grid from the design file */
+  .shell {
+    width: 100%;
+    max-width: calc(var(--container-content) + var(--spacing-margin) * 2);
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5.5vw, 80px);
+  }
+
+  /* the hairline that separates every section */
+  .rule-t {
+    border-block-start: 1px solid var(--color-line);
+  }
+  .rule-b {
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  /* ------------------------------------------------------------------
+     One vertical rhythm for the whole page. Every section used to invent
+     its own clamp, so the gaps between them read as accidental — these
+     three steps are the only ones any section may use.
+     ------------------------------------------------------------------ */
+  .section-y {
+    padding-block: clamp(64px, 9vw, 128px);
+  }
+  /* bands: numbers, logos, the record rail — a beat, not a chapter */
+  .section-y-sm {
+    padding-block: clamp(44px, 6vw, 80px);
+  }
+  /* the closing statement, which wants air around it */
+  .section-y-lg {
+    padding-block: clamp(76px, 11vw, 160px);
+  }
+  /* the step between a section header and the body beneath it */
+  .head-gap {
+    margin-block-start: clamp(36px, 5.5vw, 76px);
+  }
+  /* the same step inside a held, full-screen section, where the budget is
+     the viewport rather than the page */
+  .head-gap-vh {
+    margin-block-start: clamp(24px, 4vh, 56px);
+  }
+
+  /* ------------------------------------------------------------------
+     Held, full-screen stages (the systems rail, the outputs frame).
+     They are one screen tall ONLY where a screen is tall enough to hold a
+     header and a panel. On a short laptop the header alone ate two thirds
+     of the viewport and the panel underneath was cut, so there the section
+     simply lays out down the page and its tabs do the navigating.
+     ------------------------------------------------------------------ */
+  .stage-screen {
+    display: flex;
+    flex-direction: column;
+    /* owned here rather than as utilities on the element: Tailwind utilities
+       outrank this layer, so a padding class on the same node quietly beat the
+       held-state padding below and left the panel a third of the screen. */
+    padding-block: clamp(64px, 9vw, 128px) clamp(48px, 6vw, 72px);
+  }
+  /* the horizontal rail scrolls by finger until the stage takes over */
+  .stage-frame-x {
+    overflow-x: auto;
+  }
+  /* One output at a time until the stage is held. Driven from here rather
+     than with a `hidden` class: utilities outrank this layer, so three of the
+     four panels stayed display:none even while the stage was held and the
+     hand-over had nothing to slide. */
+  .stage-panel {
+    display: none;
+    margin-block-end: 2rem;
+  }
+  .stage-panel[data-active="true"] {
+    display: flex;
+  }
+  @media (min-width: 1024px) and (min-height: 800px) {
+    .stage-screen {
+      height: 100svh;
+      padding-block: clamp(32px, 5vh, 72px) clamp(24px, 3vh, 48px);
+    }
+    .stage-frame,
+    .stage-frame-x {
+      min-height: 0;
+      flex: 1 1 0%;
+      overflow: hidden;
+    }
+    /* held: every panel laid out, GSAP decides which one is on screen */
+    .stage-panel {
+      position: absolute;
+      inset: 0;
+      margin-block-end: 0;
+      display: flex;
+    }
+  }
+
+  /* small uppercase monospace label used throughout */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.4;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-45);
+  }
+}
+
+@layer utilities {
+  /* Applied as a real rule rather than an arbitrary `leading-[…]` utility:
+     Tailwind dropped the var() form, so headings fell back to the font's own
+     metric and Arabic lines collided. */
+  .display-leading {
+    line-height: var(--lh-display);
+  }
+  .hero-leading {
+    line-height: var(--lh-hero);
+  }
+
+  /* line-by-line reveal: each line sits in a mask and slides up.
+     The clip box is pushed below the baseline (and pulled back with a negative
+     margin) so descenders like y, p and g are never cut off. */
+  .line-mask {
+    display: block;
+    overflow: hidden;
+    padding-block-end: 0.16em;
+    margin-block-end: -0.16em;
+  }
+  .line-mask > span {
+    display: block;
+    will-change: transform;
+  }
+
+  /* A run that must keep Latin order inside an Arabic page — a counter like
+     "01 / 04", a phone number, a date. Without the isolation the bidi
+     algorithm reads it right to left and prints "04 / 01". */
+  .ltr-run {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  /* numerals that do not jitter while a counter runs */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Centring something positioned with a logical offset. `translate-x` is
+     physical, so in Arabic the handle drifted off its own divider by half its
+     width until the shift was mirrored too. */
+  .pin-inline {
+    transform: translateX(-50%);
+  }
+  [dir="rtl"] .pin-inline {
+    transform: translateX(50%);
+  }
+  .pin-inline-mid {
+    transform: translate(-50%, -50%);
+  }
+  [dir="rtl"] .pin-inline-mid {
+    transform: translate(50%, -50%);
+  }
+
+  /* A progress line grows from where the sequence starts. `origin-left` is
+     physical, so in Arabic the fill grew away from stage 01 instead of out of
+     it — the line ran backwards. */
+  [dir="rtl"] .rail-fill-h,
+  [dir="rtl"] .pre-bar-fill {
+    transform-origin: right center;
+  }
+
+  /* directional icons flip in RTL, logos and numbers never do */
+  [dir="rtl"] .icon-dir {
+    transform: scaleX(-1);
+  }
+}
+
+@layer utilities {
+  /* horizontal rails scroll natively; the bar itself would only add noise */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
