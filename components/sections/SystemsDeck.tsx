@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { Check, Upload, GripVertical, Circle, CircleCheck, Plus, ArrowLeft, ArrowRight } from "lucide-react";
-import { gsap, ScrollTrigger, useGSAP, EASE, scrollToY, prefersReducedMotion } from "@/components/motion/primitives";
+import { gsap, useGSAP, EASE, prefersReducedMotion } from "@/components/motion/primitives";
 import { Lines, FadeUp } from "@/components/motion/primitives";
 import { Kicker } from "@/components/ui";
 import { useCopy } from "@/lib/copy";
@@ -240,7 +240,6 @@ export function SystemsDeck() {
   const root = useRef<HTMLElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<ScrollTrigger | null>(null);
   const [index, setIndex] = useState(0);
   const [progress, setProgress] = useState(0);
 
@@ -263,89 +262,33 @@ export function SystemsDeck() {
     }
   }, [systemGroups.length]);
 
-  /* On desktop the section is held and the vertical wheel drives the row
-     sideways, so the arrows move the page rather than the element. */
+  /* The rail always scrolls under its own control: trackpads, touch, keyboard
+     scrolling and the arrows all move the same horizontal viewport. */
   const go = (dir: -1 | 1) => {
-    const st = pinRef.current;
     const el = viewport.current;
-    if (st && el) {
-      const steps = systemGroups.length - 1;
-      const target = Math.min(steps, Math.max(0, index + dir)) / steps;
-      const y = st.start + (st.end - st.start) * target;
-      /* the same eased scroll the nav uses; native smooth scrolling fights the
-         scrubbed timeline this section is driven by */
-      scrollToY(y, 0.55);
-      return;
-    }
     if (!el) return;
     const card = track.current?.firstElementChild as HTMLElement | null;
     const step = card ? card.offsetWidth + 24 : el.clientWidth;
-    el.scrollBy({ left: dir * step * rtlSign(), behavior: "smooth" });
+    const target = Math.min(systemGroups.length - 1, Math.max(0, index + dir));
+    /* Move directly to a card boundary. A browser that suspends animation
+       frames can leave `behavior: smooth` half-way, which made the arrows look
+       unresponsive even though the rail itself was scrollable. */
+    el.scrollTo({ left: target * step * rtlSign(), behavior: "auto" });
+    setIndex(target);
+    setProgress(target / (systemGroups.length - 1));
   };
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
-      const el = track.current!;
-      const view = viewport.current!;
-
-      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 800px)", () => {
-        const distance = () => Math.max(0, el.scrollWidth - view.clientWidth);
-
-        /* One trigger drives both the hold and the sideways travel. Running two
-           separate triggers over the same pinned element left the row at x:0,
-           because the second one measured a layout the pin had already changed. */
-        const tween = gsap.to(el, {
-          x: () => -distance() * rtlSign(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: () => "+=" + distance(),
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            scrub: 0.8,
-            invalidateOnRefresh: true,
-            /* Measure the row from a clean slate. Without this the width is read
-               while the row is already translated, so the travel distance came
-               back far too short and the cards stopped after ~100px. */
-            onRefreshInit: () => gsap.set(el, { x: 0 }),
-            onUpdate: (self) => {
-              setProgress(self.progress);
-              setIndex(Math.round(self.progress * (systemGroups.length - 1)));
-            },
-          },
-        });
-        pinRef.current = tween.scrollTrigger ?? null;
-
-        return () => {
-          pinRef.current = null;
-          tween.scrollTrigger?.kill();
-          tween.kill();
-          gsap.set(el, { x: 0 });
-        };
+      if (prefersReducedMotion()) return;
+      gsap.from(".sys-card", {
+        y: 30,
+        autoAlpha: 0,
+        duration: 0.7,
+        stagger: 0.08,
+        ease: EASE.out,
+        scrollTrigger: { trigger: root.current, start: "top 78%", once: true },
       });
-
-      /* touch and reduced motion keep plain native scrolling */
-      mm.add("(max-width: 1023px), (max-height: 799px), (prefers-reduced-motion: reduce)", () => {
-        view.style.overflowX = "auto";
-        if (!prefersReducedMotion()) {
-          gsap.from(".sys-card", {
-            y: 30,
-            autoAlpha: 0,
-            duration: 0.7,
-            stagger: 0.08,
-            ease: EASE.out,
-            scrollTrigger: { trigger: root.current, start: "top 78%", once: true },
-          });
-        }
-        return () => {
-          view.style.overflowX = "";
-        };
-      });
-
-      return () => mm.revert();
     },
     { scope: root, dependencies: [] },
   );
@@ -420,13 +363,12 @@ export function SystemsDeck() {
           tabIndex={0}
           role="region"
           aria-label={systems.railLabel}
-          className="stage-frame-x no-scrollbar mt-7 pb-4 focus-visible:outline-2 focus-visible:outline-blue
+          className="stage-frame-x stage-frame-x-scroll no-scrollbar mt-7 pb-4 focus-visible:outline-2 focus-visible:outline-blue
             md:mt-[clamp(20px,3vh,36px)] md:pb-0"
         >
           <div
             ref={track}
-            className="flex h-full snap-x snap-mandatory gap-6 px-[clamp(20px,5.5vw,80px)] will-change-transform
-              md:snap-none"
+            className="flex h-full snap-x snap-mandatory gap-6 px-[clamp(20px,5.5vw,80px)]"
           >
           {systemGroups.map((g, i) => {
             const Panel = PANELS[i];

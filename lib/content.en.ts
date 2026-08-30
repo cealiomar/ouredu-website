@@ -210,6 +210,8 @@ export const outputs = {
   intro:
     "Every system ends in something a person actually uses — a route sheet, a record, a certificate, a lesson plan.",
   hint: "Keep scrolling to step through each output",
+  prev: "Previous output",
+  next: "Next output",
   tabs: [
     { label: "Bus route sheet", source: "School Transportation" },
     { label: "Enrolment record", source: "Admission & Registration" },

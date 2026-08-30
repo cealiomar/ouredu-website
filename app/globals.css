@@ -179,6 +179,20 @@
       margin-block-end: 0;
       display: flex;
     }
+    /* Systems are deliberately a native horizontal rail: vertical page scroll
+       stays free while the arrows, Shift+wheel, trackpad and touch move cards. */
+    .stage-frame-x-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    /* Outputs change only through their direct tabs and arrows; no held
+       scroll sequence means the page never feels trapped in this section. */
+    .out-stage[data-manual] .stage-panel {
+      display: none;
+    }
+    .out-stage[data-manual] .stage-panel[data-active="true"] {
+      display: flex;
+    }
   }
 
   /* small uppercase monospace label used throughout */

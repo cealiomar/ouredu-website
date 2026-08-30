@@ -1,10 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ProgressRail } from "@/components/ui/ProgressRail";
 import Image from "next/image";
-import { Printer, FileDown, CircleCheck, MapPin, Flag } from "lucide-react";
-import { gsap, ScrollTrigger, useGSAP, EASE, scrollToY, prefersReducedMotion, Lines, FadeUp } from "@/components/motion/primitives";
+import { ArrowLeft, ArrowRight, Printer, FileDown, CircleCheck, MapPin, Flag } from "lucide-react";
+import { Lines, FadeUp } from "@/components/motion/primitives";
 import { Kicker } from "@/components/ui";
 import { useCopy } from "@/lib/copy";
 
@@ -264,80 +264,15 @@ const PANELS = [RouteSheet, EnrolmentRecord, LessonPlan, Certificate];
 
 export function Outputs() {
   const { outputs } = useCopy();
-  const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
-  const pin = useRef<ScrollTrigger | null>(null);
   const n = PANELS.length;
 
-  /* The tabs are controls on every screen. On a phone they simply swap the
-     panel; while the section is held they scroll to that panel's place in the
-     hold, so the same click means the same thing either way. */
-  const choose = (i: number) => {
-    const st = pin.current;
-    if (!st) {
-      setActive(i);
-      return;
-    }
-    scrollToY(st.start + ((st.end - st.start) * i) / (n - 1));
-  };
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      const panels = gsap.utils.toArray<HTMLElement>(".out-panel", root.current);
-
-      /* Held in place while the outputs change over — one screen of scroll per
-         output, then the page carries on. */
-      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 1024px) and (min-height: 800px)", () => {
-        /* A hand-over, not a dissolve: every panel is opaque and simply moves
-           out of the frame as the next one moves in, so two of them are never
-           translucent on top of each other. */
-        gsap.set(panels, { yPercent: 105, autoAlpha: 1 });
-        gsap.set(panels[0], { yPercent: 0 });
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".out-stage",
-            start: "top top",
-            end: () => "+=" + (n - 1) * window.innerHeight * 0.9,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            scrub: 0.7,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => setActive(Math.round(self.progress * (n - 1))),
-          },
-        });
-        pin.current = tl.scrollTrigger ?? null;
-
-        for (let i = 0; i < n - 1; i++) {
-          tl.to(panels[i], { yPercent: -105, duration: 1, ease: EASE.inOut }, i)
-            .to(panels[i + 1], { yPercent: 0, duration: 1, ease: EASE.inOut }, i);
-        }
-
-        return () => {
-          pin.current = null;
-          gsap.set(panels, { clearProps: "all" });
-        };
-      });
-
-      /* phones and reduced motion: everything stacked, nothing held */
-      mm.add("(max-width: 1023px), (max-height: 799px), (prefers-reduced-motion: reduce)", () => {
-        gsap.set(panels, { clearProps: "all" });
-        return () => gsap.set(panels, { clearProps: "all" });
-      });
-
-      return () => mm.revert();
-    },
-    { scope: root, dependencies: [] },
-  );
+  const choose = (i: number) => setActive(Math.min(n - 1, Math.max(0, i)));
 
   return (
-    <section ref={root} className="rule-b bg-tint" aria-labelledby="outputs-heading">
-      {/* The heading is inside the held frame, not above it: pinning only the
-          panels meant you arrived on a certificate with nothing left on screen
-          saying which section you were in. */}
+    <section className="rule-b bg-tint" aria-labelledby="outputs-heading">
       <div
+        data-manual
         className="out-stage stage-screen relative z-20 bg-tint shell"
       >
         <div className="md:shrink-0">
@@ -409,6 +344,28 @@ export function Outputs() {
                 style={{ width: `${((active + 1) / n) * 100}%` }}
               />
             </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => choose(active - 1)}
+                aria-label={outputs.prev}
+                disabled={active === 0}
+                className="flex size-10 items-center justify-center rounded-full border border-line bg-paper
+                  transition-colors hover:border-ink disabled:opacity-35 disabled:hover:border-line"
+              >
+                <ArrowLeft size={16} className="icon-dir" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => choose(active + 1)}
+                aria-label={outputs.next}
+                disabled={active === n - 1}
+                className="flex size-10 items-center justify-center rounded-full border border-line bg-paper
+                  transition-colors hover:border-ink disabled:opacity-35 disabled:hover:border-line"
+              >
+                <ArrowRight size={16} className="icon-dir" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </div>
 
