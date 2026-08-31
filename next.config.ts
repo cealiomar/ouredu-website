@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
      survive while the live trigger measures against it, so scrubbed pins never
      engage. Production renders once, so this only affects the dev experience. */
   reactStrictMode: false,
+  output: "export",
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
