@@ -3,6 +3,7 @@
 import { Lines, FadeUp } from "@/components/motion/primitives";
 import { Kicker, ArrowRight } from "@/components/ui";
 import { useCopy, useLang } from "@/lib/copy";
+import { withBasePath } from "@/lib/paths";
 
 /* Covers are generated from the brand's radial motif rather than stock photos —
    three colours only, and they scale to any size without an asset pipeline. */
@@ -81,7 +82,7 @@ function Cover({ kind }: { kind: "arcs" | "dots" | "rays" }) {
 export function Insights() {
   const { insights } = useCopy();
   const lang = useLang();
-  const insightsHref = lang === "ar" ? "/ar/insights" : "/insights";
+  const insightsHref = withBasePath(lang === "ar" ? "/ar/insights" : "/insights");
   return (
     <section id="insights" className="rule-b" aria-labelledby="insights-heading">
       <div className="shell section-y">

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCopy } from "@/lib/copy";
+import { withBasePath } from "@/lib/paths";
 
 export function Footer() {
   const { footer, chrome, nav } = useCopy();
@@ -11,7 +12,7 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-3 lg:grid-cols-5">
           <div className="col-span-2 md:col-span-3 lg:col-span-1 lg:pe-12">
             <Image
-              src="/logo.svg"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.svg`}
               alt={chrome.logoAlt}
               width={112}
               height={32}
@@ -31,7 +32,7 @@ export function Footer() {
                 {footer.currentLanguage}
               </span>
               <a
-                href={nav.langHref}
+                href={withBasePath(nav.langHref)}
                 className="rounded-md px-3.5 py-1.5 font-mono text-[11px] tracking-[0.1em] text-[#6E6E6E]
                   transition-colors hover:text-paper"
               >

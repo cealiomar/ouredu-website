@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/components/motion/primitives";
 import { useCopy } from "@/lib/copy";
+import { withBasePath } from "@/lib/paths";
 
 export function TrustBand() {
   const { trust, a11y } = useCopy();
@@ -63,7 +64,7 @@ export function TrustBand() {
             {row.map((l, i) => (
               <div key={`${l.src}-${i}`} className="relative h-16 w-[132px] shrink-0">
                 <Image
-                  src={l.src}
+                  src={withBasePath(l.src)}
                   alt={i < trust.logos.length ? l.alt : ""}
                   aria-hidden={i >= trust.logos.length}
                   fill

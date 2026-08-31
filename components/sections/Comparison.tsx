@@ -111,7 +111,7 @@ export function Comparison() {
               <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-line bg-paper">
                 <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-off px-4 py-3">
                   <span className="flex items-center gap-2.5">
-                    <Image src="/logo.svg" alt="" width={56} height={16} aria-hidden="true" />
+                    <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.svg`} alt="" width={56} height={16} aria-hidden="true" />
                     <span className="text-[12.5px] font-semibold">{compareUI.workspace}</span>
                   </span>
                   <span className="hidden items-center gap-1.5 rounded-full bg-blue-bg px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.12em] text-blue-ink sm:inline-flex">

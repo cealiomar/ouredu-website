@@ -5,6 +5,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { gsap, useGSAP, scrollToY } from "@/components/motion/primitives";
 import { Button } from "@/components/ui";
 import { useCopy } from "@/lib/copy";
+import { withBasePath } from "@/lib/paths";
 
 export function Nav() {
   const { nav, chrome, navUI } = useCopy();
@@ -203,9 +204,9 @@ export function Nav() {
         }}
       >
         <nav className="contents" aria-label={navUI.main}>
-          <a href={navUI.home} className="flex shrink-0 items-center justify-self-start" aria-label={chrome.home}>
+          <a href={withBasePath(navUI.home)} className="flex shrink-0 items-center justify-self-start" aria-label={chrome.home}>
             <Image
-              src="/logo.svg"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.svg`}
               alt={chrome.logoAlt}
               width={91}
               height={26}
@@ -239,7 +240,7 @@ export function Nav() {
 
           <div className="flex shrink-0 items-center justify-self-end gap-3.5">
             <a
-              href={nav.langHref}
+              href={withBasePath(nav.langHref)}
               className="mono-label transition-colors hover:text-ink"
               aria-label={chrome.langSwitch}
             >
